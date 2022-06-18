@@ -25,7 +25,7 @@ function App() {
 		if (notification) {
 			setTimeout(() => {
 				setNotification(null);
-			}, 5000);
+			}, 10000);
 		}
 	}, [notification]);
 
@@ -33,9 +33,9 @@ function App() {
 		if (solanaNetwork) {
 			setNotification({
 				type: "success",
-				message: `App is using ${
+				message: `App is using Solana ${
 					solanaNetwork === "mainnet-beta" ? "Mainnet" : "Devnet"
-				} solana network`,
+				}`,
 			});
 		}
 	}, [solanaNetwork]);

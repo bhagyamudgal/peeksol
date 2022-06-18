@@ -30,18 +30,53 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
+	const connection = new Connection(clusterApiUrl(solanaNetwork));
+
 	const getAccountBalance = async (address: PublicKey) => {
-		const connection = new Connection(clusterApiUrl(solanaNetwork));
 		const accountBalance = await connection.getBalance(address);
 
 		return accountBalance / LAMPORTS_PER_SOL;
 	};
 
 	const getAccountInfo = async (address: PublicKey) => {
-		const connection = new Connection(clusterApiUrl(solanaNetwork));
 		const accountInfo = await connection.getAccountInfo(address);
 
 		return accountInfo;
+	};
+
+	const getSOLAirdrop = async () => {
+		try {
+			const accountAddressInput = inputRef?.current?.value;
+
+			if (!accountAddressInput) {
+				setNotification({
+					type: "error",
+					message: "No account address entered!",
+				});
+				return;
+			}
+
+			const accountAddress = new PublicKey(accountAddressInput);
+
+			setFetchingStatus("FETCHING");
+
+			await connection.requestAirdrop(
+				accountAddress,
+				LAMPORTS_PER_SOL * 1
+			);
+
+			setFetchingStatus("FETCHED");
+			setNotification({
+				type: "success",
+				message: "Transferred 1 SOL to the entered address!",
+			});
+		} catch (error) {
+			console.error("getSOLAirdrop => ", error);
+			setNotification({
+				type: "error",
+				message: "Something went wrong! Please check entered address.",
+			});
+		}
 	};
 
 	// function to handle button click
@@ -127,11 +162,13 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 
 	return (
 		<main className="main">
-			<h1 className="heading-1 text-center my-4">
-				Check SOL balance of any solana account address using PeekSol.
+			<h1 className="heading-1 text-center my-4 sm:px-4">
+				Check <u className="underline-offset-2">SOL balance</u> of any
+				solana account address or get{" "}
+				<u className="underline-offset-2">Airdrop</u> of 1 SOL using{" "}
+				<u className="underline-offset-2">PeekSol</u>
 			</h1>
-
-			<div className="flex justify-center items-center flex-wrap my-6">
+			<div className="flex justify-center items-center flex-wrap my-8">
 				<input
 					className="text-input w-[80%] sm:w-[500px]"
 					type="text"
@@ -139,16 +176,20 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 					ref={inputRef}
 				/>
 
-				<button type="button" className="button" onClick={handleSubmit}>
+				<button
+					type="button"
+					className="button"
+					onClick={handleSubmit}
+					disabled={fetchingStatus === "FETCHING"}
+				>
 					Check SOL Balance
 				</button>
 			</div>
-
 			{result && (
 				<div className="flex flex-col max-w-[600px] mx-auto space-y-8">
-					<span className="flex items-center">
+					<span className="flex items-center flex-wrap">
 						<p className="text-primary mr-4">Entered address:</p>
-						<div className="text-secondary">
+						<div className="text-secondary break-words max-w-[90%]">
 							{accountAddress ?? (
 								<LoadingSkeleton width="20rem" />
 							)}
@@ -176,6 +217,22 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 							)}
 						</div>
 					</span>
+					{solanaNetwork === "devnet" && (
+						<span className="flex items-center flex-wrap">
+							<button
+								type="button"
+								className="button mr-4 mb-4 sm:mb-0"
+								onClick={getSOLAirdrop}
+								disabled={fetchingStatus === "FETCHING"}
+							>
+								Airdrop 1 SOL
+							</button>
+
+							<p className="text-secondary break-words max-w-[90%]">
+								( It takes some time to reflect the airdrop )
+							</p>
+						</span>
+					)}
 				</div>
 			)}
 		</main>

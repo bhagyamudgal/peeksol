@@ -73,7 +73,7 @@
 	}
 
 	.button {
-		@apply p-2 rounded-sm bg-secondary text-secondary border-none;
+		@apply p-2 rounded-sm bg-secondary text-secondary border-none disabled:bg-gray-600;
 	}
 
 	.notification {
