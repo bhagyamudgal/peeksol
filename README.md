@@ -1,7 +1,7 @@
 
 # PeekSol
 
-Using PeekSol, you can check SOL balance of any solana account address or get Airdrop of 1 SOL to the entered address. AIrdrop only works on devnet.
+Using PeekSol, you can check SOL balance of any solana account address or get Airdrop of 1 SOL to the entered address. Airdrop only works on devnet.
 
 **Link to App -** https://peeksol.netlify.app/
 
