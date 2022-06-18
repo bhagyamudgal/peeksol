@@ -22,18 +22,6 @@
 		@apply bg-[#255C99];
 	}
 
-	.bg-success {
-		@apply bg-green-500;
-	}
-
-	.bg-warning {
-		@apply bg-yellow-500;
-	}
-
-	.bg-error {
-		@apply bg-red-500;
-	}
-
 	.text-primary {
 		@apply text-[#FF715B];
 	}
@@ -49,7 +37,7 @@
 	}
 
 	.main {
-		@apply container flex-1 px-3 my-5;
+		@apply container flex-1 px-3 mt-5 mb-20;
 	}
 
 	.header {
@@ -74,9 +62,5 @@
 
 	.button {
 		@apply p-2 rounded-sm bg-secondary text-secondary border-none disabled:bg-gray-600;
-	}
-
-	.notification {
-		@apply w-full p-3 text-center text-white;
 	}
 }

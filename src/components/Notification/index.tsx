@@ -1,22 +1,35 @@
 import React from "react";
+import { Toaster, toast } from "react-hot-toast";
 
-export type NotificationType = "success" | "warning" | "error";
-
-export interface NotificationProps {
-	type: NotificationType;
-	message: string;
+export default function Notification() {
+	return <Toaster position="top-center" reverseOrder={true} />;
 }
 
-export default function Notification({ type, message }: NotificationProps) {
-	let bgColor: "bg-success" | "bg-warning" | "bg-error" = "bg-success";
+const duration = 5000;
 
-	if (type === "warning") {
-		bgColor = "bg-warning";
-	}
+const successToast = (message: string) => {
+	toast.remove();
+	toast.success(message, { duration });
+};
 
-	if (type === "error") {
-		bgColor = "bg-error";
-	}
+const errorToast = (message: string) => {
+	toast.remove();
+	toast.error(message, { duration });
+};
 
-	return <div className={`notification ${bgColor}`}>{message}</div>;
-}
+const infoToast = (message: string) => {
+	toast.remove();
+	toast(message, {
+		icon: <i className="bi bi-info-circle-fill text-sky-500" />,
+		duration,
+	});
+};
+
+const loadingToast = (message: string) => {
+	toast.remove();
+	toast.loading(message, {
+		duration,
+	});
+};
+
+export { successToast, errorToast, infoToast, loadingToast };

@@ -5,18 +5,17 @@ import {
 	PublicKey,
 	LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
-import { NotificationProps } from "../Notification";
+import { successToast, errorToast, loadingToast } from "../Notification";
 import { SolanaNetworkType } from "../../App";
 import LoadingSkeleton from "../LoadingSkeleton";
 
 interface MainProps {
 	solanaNetwork: SolanaNetworkType;
-	setNotification: (value: NotificationProps) => void;
 }
 
 type FetchingStatusType = "IDLE" | "FETCHING" | "FETCHED";
 
-export default function Main({ solanaNetwork, setNotification }: MainProps) {
+export default function Main({ solanaNetwork }: MainProps) {
 	const [fetchingStatus, setFetchingStatus] =
 		useState<FetchingStatusType>("IDLE");
 
@@ -49,16 +48,14 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 			const accountAddressInput = inputRef?.current?.value;
 
 			if (!accountAddressInput) {
-				setNotification({
-					type: "error",
-					message: "No account address entered!",
-				});
+				errorToast("No account address entered!");
 				return;
 			}
 
 			const accountAddress = new PublicKey(accountAddressInput);
 
 			setFetchingStatus("FETCHING");
+			loadingToast("Airdropping 1 SOL");
 
 			await connection.requestAirdrop(
 				accountAddress,
@@ -66,16 +63,11 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 			);
 
 			setFetchingStatus("FETCHED");
-			setNotification({
-				type: "success",
-				message: "Transferred 1 SOL to the entered address!",
-			});
+			successToast("Airdrop Successful!");
 		} catch (error) {
+			setFetchingStatus("IDLE");
 			console.error("getSOLAirdrop => ", error);
-			setNotification({
-				type: "error",
-				message: "Something went wrong! Please check entered address.",
-			});
+			errorToast("Something went wrong! Please check entered address.");
 		}
 	};
 
@@ -89,10 +81,7 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 			const accountAddressInput = inputRef?.current?.value;
 
 			if (!accountAddressInput) {
-				setNotification({
-					type: "error",
-					message: "No account address entered!",
-				});
+				errorToast("No account address entered!");
 				return;
 			}
 
@@ -101,6 +90,7 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 			setAccountAddress(accountAddress.toString());
 
 			setFetchingStatus("FETCHING");
+			loadingToast("Fetching Balance");
 
 			const accountBalance = await getAccountBalance(accountAddress);
 
@@ -110,25 +100,17 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 				setIsAccountExecutable(accountInfo.executable);
 			} else {
 				setIsAccountExecutable("---");
-				setNotification({
-					type: "error",
-					message: "Error in getting account executable status!",
-				});
+				errorToast("Error in fetching account executable status!");
 			}
 
 			if (accountBalance) {
 				setAccountBalance(accountBalance);
-				setNotification({
-					type: "success",
-					message: "Account balance fetched successfully!",
-				});
+				successToast("Account balance fetched successfully!");
 			} else {
 				setAccountBalance("---");
-				setNotification({
-					type: "error",
-					message:
-						"Error in getting sol balance for the entered address!",
-				});
+				errorToast(
+					"Error in fetching sol balance for the entered address!"
+				);
 			}
 
 			setFetchingStatus("FETCHED");
@@ -136,10 +118,8 @@ export default function Main({ solanaNetwork, setNotification }: MainProps) {
 			setAccountAddress(null);
 			setAccountBalance(null);
 			setFetchingStatus("IDLE");
-			setNotification({
-				type: "error",
-				message: "Something went wrong! Please check entered address.",
-			});
+			errorToast("Something went wrong! Please check entered address.");
+
 			console.error("handleSubmit => ", error);
 		}
 	};

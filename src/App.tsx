@@ -4,59 +4,33 @@ import Footer from "./components/Footer";
 // components
 import Header from "./components/Header";
 import Main from "./components/Main";
-import Notification, { NotificationType } from "./components/Notification";
-
-type NotificationStateType = {
-	type: NotificationType;
-	message: string;
-} | null;
+import Notification, { infoToast } from "./components/Notification";
 
 export type SolanaNetworkType = "mainnet-beta" | "devnet";
 
 function App() {
-	const [notification, setNotification] =
-		useState<NotificationStateType>(null);
-
 	const [solanaNetwork, setSolanaNetwork] =
 		useState<SolanaNetworkType>("mainnet-beta");
 
-	// don't show notification after 5 seconds
-	useEffect(() => {
-		if (notification) {
-			setTimeout(() => {
-				setNotification(null);
-			}, 10000);
-		}
-	}, [notification]);
-
 	useEffect(() => {
 		if (solanaNetwork) {
-			setNotification({
-				type: "success",
-				message: `App is using Solana ${
+			infoToast(
+				`App is using Solana ${
 					solanaNetwork === "mainnet-beta" ? "Mainnet" : "Devnet"
-				}`,
-			});
+				}`
+			);
 		}
 	}, [solanaNetwork]);
 
 	return (
 		<div className="app">
-			{notification && (
-				<Notification
-					type={notification?.type}
-					message={notification?.message}
-				/>
-			)}
+			<Notification />
 
 			<Header
 				solanaNetwork={solanaNetwork}
 				setSolanaNetwork={setSolanaNetwork}
 			/>
-			<Main
-				solanaNetwork={solanaNetwork}
-				setNotification={setNotification}
-			/>
+			<Main solanaNetwork={solanaNetwork} />
 			<Footer />
 		</div>
 	);
