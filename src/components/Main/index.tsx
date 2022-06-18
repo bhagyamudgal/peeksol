@@ -152,7 +152,7 @@ export default function Main({ solanaNetwork }: MainProps) {
 				<input
 					className="text-input w-[80%] sm:w-[500px]"
 					type="text"
-					placeholder="Enter wallet address"
+					placeholder="Enter account address"
 					ref={inputRef}
 				/>
 
