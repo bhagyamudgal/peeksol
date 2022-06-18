@@ -61,6 +61,6 @@
 	}
 
 	.button {
-		@apply p-2 rounded-sm bg-secondary text-secondary border-none disabled:bg-gray-600;
+		@apply p-2 rounded-sm bg-secondary text-secondary border-none disabled:bg-gray-600 disabled:cursor-not-allowed;
 	}
 }
