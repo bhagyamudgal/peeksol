@@ -5,7 +5,7 @@ Using PeekSol, you can check SOL balance of any solana account address or get Ai
 
 **Link to App -** https://peeksol.netlify.app/
 
-**My Portfolio Website -** https://www.bhagyamudgal.me/
+**My Portfolio Website -** https://www.bhagyamudgal.com/
 
 
 
