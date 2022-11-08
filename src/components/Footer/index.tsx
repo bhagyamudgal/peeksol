@@ -6,7 +6,7 @@ export default function Footer() {
 			<p className="text-primary text-center">
 				Developed By
 				<a
-					href="http://www.bhagyamudgal.me"
+					href="http://www.bhagyamudgal.com"
 					target="_blank"
 					rel="noopener noreferrer"
 					className="link"
